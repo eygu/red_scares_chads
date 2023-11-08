@@ -1,6 +1,0 @@
->Sphinx 
-KQRK
->Bandersnatch 
-KAK
->Snark 
-KQRIKAAKABK
