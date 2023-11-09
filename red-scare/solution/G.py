@@ -1,5 +1,5 @@
 from collections import defaultdict
-import heapq
+import os
 from heapq import heappop as pop, heappush as push
 
 class G:
@@ -22,7 +22,7 @@ class G:
         while pq:
             D, i = pop(pq)
             if i == finish:
-                print(dist)
+                #print(dist)
                 return D
             if D != dist[i]: continue
             for j, node_value in  self.G[i].items():
@@ -30,8 +30,19 @@ class G:
                 w = node_value[0]
                 if not is_red:
                     add(j, D + w)
-        print(dist)
+        #print(dist)
         return dist[finish]
+
+def read_all_files(dir_path):
+    # list to store files
+    res = []
+
+    # Iterate directory
+    for path in os.listdir(dir_path):
+        # check if current path is a file
+        if os.path.isfile(os.path.join(dir_path, path)):
+            res.append(path)
+    return res
 
 def read_red_scare_data(filename):
     with open(filename, 'r') as file:
@@ -84,10 +95,16 @@ def case_none(s, t, black_nodes, red_nodes, graph):
 
 
 def main():
-    n, m, r, s, t, black_nodes, red_nodes, edges, graph = read_red_scare_data("C:/Gitprojects/Algorithm_Design-Assignments/red-scare/data/gnm-10-15-0.txt")
+    absolute_path = r"C:\Gitprojects\red_scares_chads\red-scare\data"
+    all_files = read_all_files(absolute_path)
 
-    res = case_none(s, t, black_nodes, red_nodes, graph)
-    print(res)
+    for file in all_files:
+        if file.startswith("gnm"):
+            path = rf"{absolute_path}\{file}"
+            n, m, r, s, t, black_nodes, red_nodes, edges, graph = read_red_scare_data(path)
+            res = case_none(s, t, black_nodes, red_nodes, graph)
+            print(f"file: {file}, dijkstra result: {res}")
+
 
 if __name__ == "__main__":
     main()
