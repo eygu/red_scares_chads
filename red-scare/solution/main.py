@@ -1,5 +1,6 @@
 from collections import defaultdict
 from graph import Graph
+from G import G
 
 def read_red_scare_data(filename):
     with open(filename, 'r') as file:
@@ -8,6 +9,7 @@ def read_red_scare_data(filename):
 
 
         graph = Graph(n)
+        graph1 = G(n)
 
         vertices = []
         edges = []
