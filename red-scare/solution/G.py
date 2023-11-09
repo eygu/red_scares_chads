@@ -76,11 +76,11 @@ def main1():
     print(graph)
 
 def case_none(s, t, black_nodes, red_nodes, graph):
-    return graph.dijkstra2(s, t)
     if s in red_nodes:
         return -1
     if t in red_nodes:
         return -1
+    return graph.dijkstra2(s, t)
 
 
 def main():
