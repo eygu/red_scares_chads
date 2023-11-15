@@ -29,8 +29,9 @@ def read_graph(filename):
             is_word = True
         elif s == "0_0":
             is_grid = True
+        elif "wall" in filename:
+            is_wall = True
         else:
-            is_word = False
             s, t = int(s), int(t)
 
         nodes = dict()
@@ -51,6 +52,8 @@ def read_graph(filename):
                 id = id = line[:-2] if is_red else line
                 nodes[i] = Node(id, is_red)
                 grid_to_idx[id] = i
+            elif is_wall:
+                nodes[i] = Node(i, is_red)
             else:
                 nodes[i] = Node(i, is_red)
 
@@ -68,6 +71,10 @@ def read_graph(filename):
                     u1, v1 = edge_str.split(" -- ")
                     u = grid_to_idx[u1]
                     v = grid_to_idx[v1]
+                elif is_wall:
+                    u1, v1 = map(int, edge_str.split(" -- "))
+                    u = nodes[u1].id
+                    v = nodes[v1].id
                 else:
                     u1, v1 = map(int, edge_str.split(" -- "))
                     u = nodes[u1].id
@@ -80,6 +87,14 @@ def read_graph(filename):
                     u1, v1 = edge_str.split(" -> ")
                     u = word_to_idx[u1]
                     v = word_to_idx[v1]
+                elif is_grid:
+                    u1, v1 = edge_str.split(" -> ")
+                    u = grid_to_idx[u1]
+                    v = grid_to_idx[v1]
+                elif is_wall:
+                    u1, v1 = map(int, edge_str.split(" -> "))
+                    u = nodes[u1].id
+                    v = nodes[v1].id
                 else:
                     u1, v1 = map(int, edge_str.split(" -> "))
                     u = nodes[u1].id

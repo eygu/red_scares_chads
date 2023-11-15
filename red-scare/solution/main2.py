@@ -30,7 +30,7 @@ def case_alternate(s, t, graph):
 def main():
     # dataDirectory =  os.path.dirname(os.path.realpath(__file__)) + '/../instance-generators/handmade'
     dataDirectory =  os.path.dirname(os.path.realpath(__file__)) + '/../data'
-    file = "rusty-1-17.txt"
+    file = "wall-p-1.txt"
     path = rf"{dataDirectory}/{file}"
     n, m, r, s, t, graph = read_graph(path)
     print(graph)
