@@ -34,7 +34,6 @@ class Graph:
         pq = [(0, start)]
 
         nodes = self.nodes
-        edges = self.edges
 
         while pq:
             curr_dist, u = pop(pq)
@@ -49,6 +48,27 @@ class Graph:
                 
         return -1 if dist[finish] == float('inf') else dist[finish]
     
+    # Have all the edges that are red have weight 1 and the rest is 0
+    def dijkstra_some(self, start, finish):
+            N = len(self.G)
+            dist = [float('inf')] * N
+            pq = [(0, start)]
+
+            nodes = self.nodes
+
+            while pq:
+                curr_dist, u = pop(pq)
+                if curr_dist > dist[u]:
+                    continue
+
+                for v, edge in self.G[u].items():
+                    new_dist = curr_dist + edge.weight
+                    if new_dist < dist[v]:
+                        dist[v] = new_dist
+                        push(pq, (new_dist, v))
+                    
+            return True if dist[finish] > 0 else False
+    
 
     def bfs_alternate(self, start, finish):
         visited = set()
@@ -60,7 +80,6 @@ class Graph:
             u, path = queue.popleft()
             
             if u == finish:
-                print(path)
                 return True
             
             if u not in visited:
