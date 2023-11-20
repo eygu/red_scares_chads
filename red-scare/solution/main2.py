@@ -2,28 +2,12 @@ from read_files import read_all_files, read_graph
 import os 
 
 def case_none(s, t, graph):
-    if graph.is_word:
-        s = graph.word_to_idx[s]
-        t = graph.word_to_idx[t]
-
-    elif graph.is_grid:
-        s = graph.grid_to_idx[s]
-        t = graph.grid_to_idx[t]
-
     if graph.nodes[s].is_red or graph.nodes[t].is_red:
         return -1
     
     return graph.bfs_none(s, t)
 
 def case_alternate(s, t, graph):
-    if graph.is_word:
-        s = graph.word_to_idx[s]
-        t = graph.word_to_idx[t]
-
-    elif graph.is_grid:
-        s = graph.grid_to_idx[s]
-        t = graph.grid_to_idx[t]
-
     return graph.bfs_alternate(s, t)
 
 
