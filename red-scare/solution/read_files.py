@@ -104,12 +104,12 @@ def read_graph(filename):
                 G[u][v] = 1
 
         graph = Graph(n, G, nodes)
-        s, t = get_source_target(graph, word_to_idx, grid_to_idx, is_word, is_grid, s, t)
+        s, t = get_source_target(word_to_idx, grid_to_idx, is_word, is_grid, s, t)
 
     return n, m, r, s, t, graph
 
 
-def read_graph_for_some(filename):
+def read_graph_for_few(filename):
     with open(filename, 'r') as file:
         is_word = False 
         is_grid = False
@@ -221,11 +221,11 @@ def read_graph_for_some(filename):
                 edges.append(e1)
 
         graph = Graph(n, G, nodes)
-        s, t = get_source_target(graph, word_to_idx, grid_to_idx, is_word, is_grid, s, t)
+        s, t = get_source_target(word_to_idx, grid_to_idx, is_word, is_grid, s, t)
 
     return n, m, r, s, t, graph
 
-def get_source_target(graph, word_to_idx, grid_to_idx, is_word, is_grid, s, t):
+def get_source_target(word_to_idx, grid_to_idx, is_word, is_grid, s, t):
     if is_word:
         source = word_to_idx[s]
         target = word_to_idx[t]
