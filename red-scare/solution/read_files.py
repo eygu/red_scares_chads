@@ -37,6 +37,7 @@ def read_graph(filename):
 
         nodes = dict()
         G = [defaultdict(int) for _ in range(n)]
+        red_nodes = dict()
 
         word_to_idx = dict()
         grid_to_idx = dict()
@@ -48,15 +49,23 @@ def read_graph(filename):
             if is_word:
                 id = line[:-2] if is_red else line
                 nodes[i] = Node(id, is_red)
+                if is_red:
+                    red_nodes[id] = i
                 word_to_idx[id] = i
             elif is_grid:
                 id = id = line[:-2] if is_red else line
                 nodes[i] = Node(id, is_red)
+                if is_red:
+                    red_nodes[i] = i
                 grid_to_idx[id] = i
             elif is_wall:
                 nodes[i] = Node(i, is_red)
+                if is_red:
+                    red_nodes[i] = i
             else:
                 nodes[i] = Node(i, is_red)
+                if is_red:
+                    red_nodes[i] = i
 
         print(nodes)
 
@@ -104,6 +113,7 @@ def read_graph(filename):
                 G[u][v] = 1
 
         graph = Graph(n, G, nodes)
+        graph.red_nodes = red_nodes
         s, t = get_source_target(word_to_idx, grid_to_idx, is_word, is_grid, s, t)
 
     return n, m, r, s, t, graph
@@ -224,6 +234,123 @@ def read_graph_for_few(filename):
         s, t = get_source_target(word_to_idx, grid_to_idx, is_word, is_grid, s, t)
 
     return n, m, r, s, t, graph
+
+
+
+def read_graph_for_some1(filename):
+    with open(filename, 'r') as file:
+        is_word = False 
+        is_grid = False
+        is_wall = False
+        is_ski = False
+        is_increasing = False
+
+        n, m, r = map(int, file.readline().split())
+        s, t = file.readline().split()
+        if s == "begin" and t == "ender":
+            is_word = True
+        elif s == "0_0":
+            is_grid = True
+        elif "wall" in filename:
+            is_wall = True
+        else:
+            s, t = int(s), int(t)
+
+        nodes = dict()
+        G = [defaultdict(int) for _ in range(n)]
+        red_nodes = dict()
+
+        word_to_idx = dict()
+        grid_to_idx = dict()
+
+        # Go through all the nodes
+        for i in range(n):
+            line = file.readline().strip()
+            is_red = line.endswith(" *")
+            if is_word:
+                id = line[:-2] if is_red else line
+                nodes[i] = Node(id, is_red)
+                if is_red:
+                    red_nodes[id] = i
+                word_to_idx[id] = i
+            elif is_grid:
+                id = id = line[:-2] if is_red else line
+                nodes[i] = Node(id, is_red)
+                if is_red:
+                    red_nodes[i] = i
+                grid_to_idx[id] = i
+            elif is_wall:
+                nodes[i] = Node(i, is_red)
+                if is_red:
+                    red_nodes[i] = i
+            else:
+                nodes[i] = Node(i, is_red)
+                if is_red:
+                    red_nodes[i] = i
+
+        print(nodes)
+
+        # Go through all the edges
+        for i in range(m):
+            edge_str = file.readline().strip()
+            if "--" in edge_str:
+                if is_word:
+                    u1, v1 = edge_str.split(" -- ")
+                    u = word_to_idx[u1]
+                    v = word_to_idx[v1]
+                elif is_grid:
+                    u1, v1 = edge_str.split(" -- ")
+                    u = grid_to_idx[u1]
+                    v = grid_to_idx[v1]
+                elif is_wall:
+                    u1, v1 = map(int, edge_str.split(" -- "))
+                    u = nodes[u1].id
+                    v = nodes[v1].id
+                else:
+                    u1, v1 = map(int, edge_str.split(" -- "))
+                    u = nodes[u1].id
+                    v = nodes[v1].id
+
+                G[u][v] = 1
+                G[v][u] = 1
+            elif "->" in edge_str:
+                if is_word:
+                    u1, v1 = edge_str.split(" -> ")
+                    u = word_to_idx[u1]
+                    v = word_to_idx[v1]
+                elif is_grid:
+                    u1, v1 = edge_str.split(" -> ")
+                    u = grid_to_idx[u1]
+                    v = grid_to_idx[v1]
+                elif is_wall:
+                    u1, v1 = map(int, edge_str.split(" -> "))
+                    u = nodes[u1].id
+                    v = nodes[v1].id
+                else:
+                    u1, v1 = map(int, edge_str.split(" -> "))
+                    u = nodes[u1].id
+                    v = nodes[v1].id
+
+                G[u][v] = 1
+
+        graph = Graph(n, G, nodes)
+        graph.red_nodes = red_nodes
+        s, t = get_source_target(word_to_idx, grid_to_idx, is_word, is_grid, s, t)
+
+    return n, m, r, s, t, graph
+
+
+def read_graph_for_some2(filename):
+    n, m, r, s, t, graph = read_graph(filename)
+    len_nodes = len(graph.G)
+    graph.G.append(defaultdict(int))
+    graph.G[len_nodes][s] = 1
+    graph.G[len_nodes][t] = 1
+    source = Node(len_nodes, False)
+    graph.nodes[len_nodes] = source
+
+    return n, m, r, len_nodes, t, graph
+
 
 def get_source_target(word_to_idx, grid_to_idx, is_word, is_grid, s, t):
     if is_word:
