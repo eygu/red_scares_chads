@@ -50,7 +50,7 @@ class Graph:
         return -1 if dist[finish] == float('inf') else dist[finish]
     
     # Have all the edges that are red have weight 1 and the rest is 0
-    def dijkstra_some(self, start, finish):
+    def dijkstra_few(self, start, finish):
             N = len(self.G)
             dist = [float('inf')] * N
             pq = [(0, start)]
@@ -68,8 +68,7 @@ class Graph:
                         dist[v] = new_dist
                         push(pq, (new_dist, v))
                     
-            return True if dist[finish] > 0 else False
-    
+            return -1 if dist[finish] == float('inf') else dist[finish]
 
     def bfs_alternate(self, start, finish):
         visited = set()
